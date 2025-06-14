@@ -1,13 +1,14 @@
-import Hero from '@/components/Hero'
+
+import Portfolio from '@/components/Portfolio'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
-export default function Home() {
+export default function PortfolioPage() {
   return (
     <div className="min-h-screen">
       <Header />
       <main>
-        <Hero />
+        <Portfolio />
       </main>
       <Footer />
     </div>
