@@ -1,13 +1,17 @@
+
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState, useEffect } from 'react'
-import { Menu, X, Volume2 } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,21 +26,38 @@ export default function Header() {
     { name: 'About', href: '/about' },
     { name: 'Services', href: '/services' },
     { name: 'Portfolio', href: '/portfolio' },
+    { name: 'Events', href: '/events' },
     { name: 'Contact', href: '/contact' },
   ]
 
+  const isActivePage = (href: string) => {
+    if (href === '/') {
+      return pathname === '/'
+    }
+    return pathname.startsWith(href)
+  }
+
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-gray-900/95 backdrop-blur-sm shadow-lg' : 'bg-transparent'
+      isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-lg border-b border-blue-100' : 'bg-white/90 backdrop-blur-sm'
     }`}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
-              <Volume2 className="h-6 w-6 text-white" />
+          <Link href="/" className="flex items-center space-x-3">
+            <div className="w-10 h-10 relative">
+              <Image
+                src="/logo.png"
+                alt="Trinity Sound Logo"
+                width={40}
+                height={40}
+                className="rounded-lg"
+              />
             </div>
-            <span className="text-xl font-bold text-white">Trinity Sound</span>
+            <div className="flex flex-col">
+              <span className="text-xl font-bold text-gray-900">Trinity Sound</span>
+              <span className="text-xs text-blue-600">Professional Audio</span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -45,19 +66,23 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-gray-300 hover:text-white transition-colors duration-200 font-medium"
+                className={`transition-colors duration-200 font-medium ${
+                  isActivePage(item.href)
+                    ? 'text-blue-600 border-b-2 border-blue-600 pb-1'
+                    : 'text-gray-700 hover:text-blue-600'
+                }`}
               >
                 {item.name}
               </Link>
             ))}
-            <Button asChild className="bg-purple-600 hover:bg-purple-700">
+            <Button asChild className="bg-blue-600 hover:bg-blue-700 shadow-md">
               <Link href="/contact">Get Quote</Link>
             </Button>
           </nav>
 
           {/* Mobile menu button */}
           <button
-            className="md:hidden text-white"
+            className="md:hidden text-gray-900"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -67,19 +92,23 @@ export default function Header() {
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-gray-900/95 backdrop-blur-sm rounded-lg mt-2">
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-white/95 backdrop-blur-sm rounded-lg mt-2 shadow-lg border border-blue-100">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="block px-3 py-2 text-gray-300 hover:text-white transition-colors duration-200"
+                  className={`block px-3 py-2 transition-colors duration-200 rounded-md ${
+                    isActivePage(item.href)
+                      ? 'text-blue-600 bg-blue-50'
+                      : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                  }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}
                 </Link>
               ))}
               <div className="px-3 py-2">
-                <Button asChild className="w-full bg-purple-600 hover:bg-purple-700">
+                <Button asChild className="w-full bg-blue-600 hover:bg-blue-700 shadow-md">
                   <Link href="/contact" onClick={() => setIsMenuOpen(false)}>
                     Get Quote
                   </Link>
