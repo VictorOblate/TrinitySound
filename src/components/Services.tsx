@@ -130,3 +130,120 @@ export default function Services() {
     </section>
   )
 }
+'use client'
+
+import React from 'react'
+import { Button } from '@/components/ui/button'
+import { 
+  Code, 
+  Palette, 
+  Smartphone, 
+  Database, 
+  Cloud, 
+  Shield,
+  ArrowRight
+} from 'lucide-react'
+
+export default function Services() {
+  const services = [
+    {
+      icon: Code,
+      title: "Web Development",
+      description: "Custom web applications built with modern frameworks and best practices",
+      features: ["React/Next.js", "Node.js", "Full-Stack Solutions"]
+    },
+    {
+      icon: Palette,
+      title: "UI/UX Design",
+      description: "Beautiful, intuitive designs that enhance user experience and engagement",
+      features: ["User Research", "Wireframing", "Prototyping"]
+    },
+    {
+      icon: Smartphone,
+      title: "Mobile Development",
+      description: "Native and cross-platform mobile applications for iOS and Android",
+      features: ["React Native", "Flutter", "Native iOS/Android"]
+    },
+    {
+      icon: Database,
+      title: "Backend Development",
+      description: "Scalable server-side solutions and API development",
+      features: ["RESTful APIs", "Database Design", "Microservices"]
+    },
+    {
+      icon: Cloud,
+      title: "Cloud Solutions",
+      description: "Cloud infrastructure setup and deployment strategies",
+      features: ["AWS/Azure", "DevOps", "Serverless"]
+    },
+    {
+      icon: Shield,
+      title: "Security & Performance",
+      description: "Optimization and security best practices for your applications",
+      features: ["Performance Audit", "Security Testing", "Code Review"]
+    }
+  ]
+
+  return (
+    <section className="py-20 bg-white dark:bg-slate-900">
+      <div className="container mx-auto px-6">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            Services I Offer
+          </h2>
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Comprehensive solutions to bring your digital ideas to life
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {services.map((service, index) => {
+            const IconComponent = service.icon
+            return (
+              <div
+                key={index}
+                className="group p-8 bg-gradient-to-br from-white to-gray-50 dark:from-slate-800 dark:to-slate-700 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-slate-600 hover:border-blue-200 dark:hover:border-blue-400"
+              >
+                <div className="mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <IconComponent className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                    {service.title}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 mb-4">
+                    {service.description}
+                  </p>
+                </div>
+
+                <ul className="space-y-2 mb-6">
+                  {service.features.map((feature, featureIndex) => (
+                    <li key={featureIndex} className="flex items-center text-sm text-gray-600 dark:text-gray-300">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full mr-3" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+
+                <Button 
+                  variant="outline" 
+                  className="w-full group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all duration-300"
+                >
+                  Learn More
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+                </Button>
+              </div>
+            )
+          })}
+        </div>
+
+        <div className="text-center mt-16">
+          <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+            Get Started
+            <ArrowRight className="w-4 h-4 ml-2" />
+          </Button>
+        </div>
+      </div>
+    </section>
+  )
+}

@@ -306,3 +306,135 @@ export default function Portfolio() {
     </section>
   )
 }
+'use client'
+
+import React from 'react'
+import Image from 'next/image'
+import { useState, useEffect } from 'react'
+import { Button } from '@/components/ui/button'
+import { 
+  Play, 
+  ExternalLink, 
+  Github 
+} from 'lucide-react'
+
+export default function Portfolio() {
+  const [selectedProject, setSelectedProject] = useState(null)
+
+  const projects = [
+    {
+      id: 1,
+      title: "Modern Web Application",
+      category: "Web Development",
+      image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop",
+      description: "A full-stack web application built with modern technologies",
+      technologies: ["React", "Node.js", "MongoDB"]
+    },
+    {
+      id: 2,
+      title: "Mobile App Design",
+      category: "UI/UX Design",
+      image: "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=600&fit=crop",
+      description: "Clean and intuitive mobile application interface",
+      technologies: ["Figma", "Sketch", "Principle"]
+    },
+    {
+      id: 3,
+      title: "E-commerce Platform",
+      category: "Full Stack",
+      image: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800&h=600&fit=crop",
+      description: "Complete e-commerce solution with payment integration",
+      technologies: ["Next.js", "Stripe", "PostgreSQL"]
+    },
+    {
+      id: 4,
+      title: "Data Visualization",
+      category: "Data Science",
+      image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&h=600&fit=crop",
+      description: "Interactive dashboard for complex data analysis",
+      technologies: ["D3.js", "Python", "API"]
+    }
+  ]
+
+  return (
+    <section className="py-20 bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800">
+      <div className="container mx-auto px-6">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            Featured Portfolio
+          </h2>
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Showcasing my latest projects and creative solutions
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+          {projects.map((project) => (
+            <div
+              key={project.id}
+              className="group relative bg-white dark:bg-slate-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
+            >
+              <div className="relative h-64 overflow-hidden">
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-300"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="flex space-x-4">
+                    <Button size="sm" className="bg-white/20 backdrop-blur-sm hover:bg-white/30">
+                      <Play className="w-4 h-4 mr-2" />
+                      Demo
+                    </Button>
+                    <Button size="sm" variant="outline" className="bg-white/20 backdrop-blur-sm border-white/30 text-white hover:bg-white/30">
+                      <Github className="w-4 h-4 mr-2" />
+                      Code
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                    {project.category}
+                  </span>
+                  <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-blue-600 transition-colors" />
+                </div>
+                
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 transition-colors">
+                  {project.title}
+                </h3>
+                
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  {project.description}
+                </p>
+                
+                <div className="flex flex-wrap gap-2">
+                  {project.technologies.map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-3 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="text-center mt-12">
+          <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+            View All Projects
+            <ExternalLink className="w-4 h-4 ml-2" />
+          </Button>
+        </div>
+      </div>
+    </section>
+  )
+}
