@@ -1,4 +1,5 @@
 
+
 import Hero from '@/components/Hero'
 import About from '@/components/About'
 import Services from '@/components/Services'
@@ -9,14 +10,26 @@ import Footer from '@/components/Footer'
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <Header />
-      <Hero />
-      <About />
-      <Services />
-      <Portfolio />
-      <Contact />
+      <main>
+        <section id="home">
+          <Hero />
+        </section>
+        <section id="about">
+          <About />
+        </section>
+        <section id="services">
+          <Services />
+        </section>
+        <section id="portfolio">
+          <Portfolio />
+        </section>
+        <section id="contact">
+          <Contact />
+        </section>
+      </main>
       <Footer />
-    </main>
+    </div>
   )
 }
