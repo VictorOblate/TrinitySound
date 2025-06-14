@@ -1,52 +1,55 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 220 27% 8%;
-    --foreground: 220 10% 95%;
-    --card: 220 27% 10%;
-    --card-foreground: 220 10% 95%;
-    --popover: 220 27% 10%;
-    --popover-foreground: 220 10% 95%;
-    --primary: 217 91% 60%;
-    --primary-foreground: 220 27% 8%;
-    --secondary: 220 20% 15%;
-    --secondary-foreground: 220 10% 85%;
-    --muted: 220 20% 15%;
-    --muted-foreground: 220 10% 65%;
-    --accent: 217 91% 60%;
-    --accent-foreground: 220 27% 8%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 188 100% 50%;
+    --accent-foreground: 0 0% 0%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 220 10% 95%;
-    --border: 220 20% 20%;
-    --input: 220 20% 20%;
-    --ring: 217 91% 60%;
-    --radius: 0.75rem;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 188 100% 50%;
+    --radius: 0rem;
+    --trinity-cyan: 188 100% 50%;
+    --trinity-black: 0 0% 0%;
+    --trinity-white: 0 0% 100%;
+    --trinity-gray: 0 0% 96%;
   }
 
-  .light {
-    --background: 220 100% 98%;
-    --foreground: 220 27% 8%;
-    --card: 220 100% 99%;
-    --card-foreground: 220 27% 8%;
-    --popover: 220 100% 99%;
-    --popover-foreground: 220 27% 8%;
-    --primary: 217 91% 60%;
-    --primary-foreground: 220 100% 98%;
-    --secondary: 220 40% 96%;
-    --secondary-foreground: 220 27% 8%;
-    --muted: 220 40% 96%;
-    --muted-foreground: 220 20% 40%;
-    --accent: 217 91% 60%;
-    --accent-foreground: 220 27% 8%;
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 188 100% 50%;
+    --accent-foreground: 0 0% 0%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 220 100% 98%;
-    --border: 220 40% 90%;
-    --input: 220 40% 90%;
-    --ring: 217 91% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 188 100% 50%;
   }
 }
 
@@ -54,76 +57,110 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
   }
 }
 
-/* Geometric Background Patterns */
-.geometric-bg {
-  background-image: 
-    radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
-    linear-gradient(135deg, transparent 25%, rgba(59, 130, 246, 0.05) 25%, rgba(59, 130, 246, 0.05) 50%, transparent 50%, transparent 75%, rgba(99, 102, 241, 0.05) 75%);
-  background-size: 100% 100%, 100% 100%, 40px 40px;
+/* Trinity Geometric Background Patterns */
+.trinity-geometric-bg {
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(0, 188, 212, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(0, 0, 0, 0.05) 0%, transparent 50%),
+    linear-gradient(45deg, transparent 25%, rgba(0, 188, 212, 0.03) 25%, rgba(0, 188, 212, 0.03) 50%, transparent 50%, transparent 75%, rgba(0, 0, 0, 0.02) 75%);
+  background-size: 100% 100%, 100% 100%, 60px 60px;
 }
 
-.hexagon-pattern {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%233b82f6' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+.trinity-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2300bcd4' fill-opacity='0.05'%3E%3Cpath d='M30 30l15-15v10l-10 10h10v-10l15 15-15 15v-10l10-10h-10v10l-15-15zm0 0l-15-15v10l10 10h-10v-10l-15 15 15 15v-10l-10-10h10v10l15-15z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   background-size: 60px 60px;
 }
 
-.circuit-pattern {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%236366f1' fill-opacity='0.03'%3E%3Cpath d='M0 0h80v80H0V0zm20 20v40h40V20H20zm20 35a15 15 0 1 1 0-30 15 15 0 0 1 0 30z'/%3E%3C/g%3E%3C/svg%3E");
+.geometric-grid {
+  background-image:
+    linear-gradient(rgba(0, 188, 212, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 188, 212, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.triangle-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23000000' fill-opacity='0.03'%3E%3Cpath d='M40 0L80 40L40 80L0 40z'/%3E%3C/g%3E%3C/svg%3E");
   background-size: 80px 80px;
 }
 
-/* Gradients */
-.gradient-primary {
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #1e40af 100%);
+/* Trinity Gradients */
+.gradient-trinity-primary {
+  background: linear-gradient(135deg, #000000 0%, #00bcd4 50%, #000000 100%);
 }
 
-.gradient-secondary {
-  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #4338ca 100%);
+.gradient-trinity-cyan {
+  background: linear-gradient(135deg, #00bcd4 0%, #00e5ff 50%, #00acc1 100%);
 }
 
-.gradient-dark {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+.gradient-trinity-dark {
+  background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #333333 100%);
 }
 
-.gradient-overlay {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.9) 0%, rgba(29, 78, 216, 0.8) 100%);
+.gradient-trinity-overlay {
+  background: linear-gradient(135deg, rgba(0, 188, 212, 0.9) 0%, rgba(0, 0, 0, 0.8) 100%);
 }
 
-/* Glass morphism effect */
-.glass {
+/* Trinity Glass Morphism */
+.trinity-glass {
   backdrop-filter: blur(16px) saturate(180%);
-  background-color: rgba(17, 25, 40, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.125);
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 188, 212, 0.2);
 }
 
-.glass-light {
+.trinity-glass-dark {
   backdrop-filter: blur(16px) saturate(180%);
-  background-color: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(0, 188, 212, 0.3);
 }
 
-/* Enhanced animations */
-.hover-lift {
+.trinity-glass-light {
+  backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced Trinity Animations */
+.trinity-hover-lift {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.hover-lift:hover {
+.trinity-hover-lift:hover {
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.25);
+  box-shadow: 0 25px 50px -12px rgba(0, 188, 212, 0.3);
 }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
+.trinity-hover-geometric {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.animate-glow {
-  animation: glow 2s ease-in-out infinite alternate;
+.trinity-hover-geometric:hover {
+  transform: translateY(-4px) rotate(2deg);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 0 30px rgba(0, 188, 212, 0.2);
+}
+
+.animate-trinity-float {
+  animation: trinityFloat 6s ease-in-out infinite;
+}
+
+.animate-trinity-glow {
+  animation: trinityGlow 2s ease-in-out infinite alternate;
+}
+
+.animate-trinity-pulse {
+  animation: trinityPulse 3s ease-in-out infinite;
+}
+
+.animate-trinity-rotate {
+  animation: trinityRotate 8s linear infinite;
 }
 
 .animate-slide-in-left {
@@ -138,54 +175,162 @@
   animation: fadeInUp 0.8s ease-out;
 }
 
-/* Card shadows with blue glow */
-.card-glow {
-  box-shadow: 
+/* Trinity Card Effects */
+.trinity-card-glow {
+  box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06),
-    0 0 0 1px rgba(59, 130, 246, 0.1),
-    0 0 20px rgba(59, 130, 246, 0.1);
+    0 0 0 1px rgba(0, 188, 212, 0.1),
+    0 0 20px rgba(0, 188, 212, 0.1);
 }
 
-.card-glow-hover:hover {
-  box-shadow: 
+.trinity-card-glow-hover:hover {
+  box-shadow:
     0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04),
-    0 0 0 1px rgba(59, 130, 246, 0.2),
-    0 0 40px rgba(59, 130, 246, 0.3);
+    0 0 0 1px rgba(0, 188, 212, 0.3),
+    0 0 40px rgba(0, 188, 212, 0.4);
 }
 
-/* Text gradients */
-.text-gradient-primary {
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8, #6366f1);
+.trinity-card-shadow {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.trinity-card-shadow-lg {
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Trinity Text Gradients */
+.text-gradient-trinity-primary {
+  background: linear-gradient(135deg, #000000, #00bcd4, #000000);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.text-gradient-secondary {
-  background: linear-gradient(135deg, #06b6d4, #3b82f6, #8b5cf6);
+.text-gradient-trinity-cyan {
+  background: linear-gradient(135deg, #00bcd4, #00e5ff, #00acc1);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Keyframe animations */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
+.text-gradient-trinity-inverse {
+  background: linear-gradient(135deg, #ffffff, #00bcd4, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Trinity Geometric Elements */
+.trinity-geometric-border {
+  position: relative;
+}
+
+.trinity-geometric-border::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #00bcd4, transparent, #00bcd4, transparent);
+  z-index: -1;
+}
+
+.trinity-corner-accent {
+  position: relative;
+}
+
+.trinity-corner-accent::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  background: #00bcd4;
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
+}
+
+.trinity-corner-accent::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  background: #00bcd4;
+  clip-path: polygon(0 100%, 0 0, 100% 100%);
+}
+
+/* Trinity Button Styles */
+.trinity-btn-primary {
+  @apply bg-black text-white hover:bg-[#00bcd4] hover:text-black;
+  @apply font-black tracking-tight transition-all duration-300;
+  @apply transform hover:scale-105;
+}
+
+.trinity-btn-secondary {
+  @apply bg-[#00bcd4] text-black hover:bg-white hover:text-black;
+  @apply font-black tracking-tight transition-all duration-300;
+  @apply border-2 border-[#00bcd4] hover:border-black;
+}
+
+.trinity-btn-outline {
+  @apply bg-transparent text-black border-2 border-black;
+  @apply hover:bg-black hover:text-white;
+  @apply font-black tracking-tight transition-all duration-300;
+}
+
+/* Trinity Keyframe Animations */
+@keyframes trinityFloat {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
   }
+
   50% {
-    transform: translateY(-20px);
+    transform: translateY(-20px) rotate(5deg);
   }
 }
 
-@keyframes glow {
+@keyframes trinityGlow {
   from {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 0 20px rgba(0, 188, 212, 0.3);
   }
+
   to {
-    box-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
+    box-shadow: 0 0 40px rgba(0, 188, 212, 0.6);
+  }
+}
+
+@keyframes trinityPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+@keyframes trinityRotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }
 
@@ -194,6 +339,7 @@
     opacity: 0;
     transform: translateX(-100px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -205,6 +351,7 @@
     opacity: 0;
     transform: translateX(100px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -216,26 +363,119 @@
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* Custom scrollbar */
+/* Trinity Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: hsl(var(--background));
+  background: #f5f5f5;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--primary));
-  border-radius: 4px;
+  background: #00bcd4;
+  border-radius: 0px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--primary) / 0.8);
+  background: #00acc1;
+}
+
+/* Trinity Typography */
+.trinity-heading {
+  @apply font-black tracking-tight;
+  letter-spacing: -0.025em;
+}
+
+.trinity-subheading {
+  @apply font-bold tracking-wide;
+  letter-spacing: 0.025em;
+}
+
+.trinity-body {
+  @apply font-medium leading-relaxed;
+}
+
+.trinity-caption {
+  @apply font-bold text-sm tracking-wide;
+  letter-spacing: 0.05em;
+}
+
+/* Trinity Responsive Utilities */
+@media (max-width: 768px) {
+  .trinity-mobile-stack {
+    @apply flex-col space-y-4 space-x-0;
+  }
+
+  .trinity-mobile-center {
+    @apply text-center justify-center items-center;
+  }
+
+  .trinity-mobile-full {
+    @apply w-full;
+  }
+}
+
+/* Trinity Print Styles */
+@media print {
+  .trinity-no-print {
+    display: none !important;
+  }
+
+  .trinity-print-only {
+    display: block !important;
+  }
+}
+
+/* Trinity Accessibility */
+.trinity-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.trinity-focus-visible:focus-visible {
+  outline: 2px solid #00bcd4;
+  outline-offset: 2px;
+}
+
+/* Trinity High Contrast Mode */
+@media (prefers-contrast: high) {
+  .trinity-high-contrast {
+    --trinity-cyan: 0 100% 50%;
+    --trinity-black: 0 0% 0%;
+    --trinity-white: 0 0% 100%;
+  }
+}
+
+/* Trinity Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .trinity-respect-motion {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Trinity Dark Mode Specific */
+@media (prefers-color-scheme: dark) {
+  .trinity-auto-dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 100%;
+  }
 }

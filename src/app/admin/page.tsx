@@ -1,20 +1,25 @@
+"use client";
 
-'use client'
-
-import { useSession } from 'next-auth/react'
-import { redirect } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import PortfolioManager from '@/components/admin/PortfolioManager'
-import ContactMessagesManager from '@/components/admin/ContactMessagesManager'
-import EventsManager from '@/components/admin/EventsManager'
-import { signOut } from 'next-auth/react'
-import { LogOut, BarChart3, Image, MessageSquare, Calendar } from 'lucide-react'
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+// import PortfolioManager from '@/components/admin/PortfolioManager'
+// import ContactMessagesManager from '@/components/admin/ContactMessagesManager'
+import EventsManager from "@/components/admin/EventsManager";
+import { signOut } from "next-auth/react";
+import {
+  LogOut,
+  BarChart3,
+  Image,
+  MessageSquare,
+  Calendar,
+} from "lucide-react";
 
 export default function AdminPage() {
-  const { data: session, status } = useSession()
+  const { data: session, status } = useSession();
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -22,16 +27,16 @@ export default function AdminPage() {
           <p>Loading admin panel...</p>
         </div>
       </div>
-    )
+    );
   }
 
   if (!session) {
-    redirect('/admin/login')
+    redirect("/admin/login");
   }
 
   const handleLogout = () => {
-    signOut({ callbackUrl: '/' })
-  }
+    signOut({ callbackUrl: "/" });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -40,10 +45,18 @@ export default function AdminPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Trinity Sound Admin</h1>
-              <p className="text-gray-600">Welcome back, {session.user?.name}</p>
+              <h1 className="text-3xl font-bold text-gray-900">
+                Trinity Sound Admin
+              </h1>
+              <p className="text-gray-600">
+                Welcome back, {session.user?.name}
+              </p>
             </div>
-            <Button onClick={handleLogout} variant="outline" className="border-gray-300">
+            <Button
+              onClick={handleLogout}
+              variant="outline"
+              className="border-gray-300"
+            >
               <LogOut className="h-4 w-4 mr-2" />
               Logout
             </Button>
@@ -61,13 +74,15 @@ export default function AdminPage() {
                   <Image className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-gray-900">Portfolio</div>
+                  <div className="text-2xl font-bold text-gray-900">
+                    Portfolio
+                  </div>
                   <p className="text-gray-600">Manage gallery items</p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card className="bg-gradient-to-br from-green-500/10 to-green-600/10 border-green-200/20 card-shadow">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
@@ -75,13 +90,15 @@ export default function AdminPage() {
                   <MessageSquare className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-gray-900">Messages</div>
+                  <div className="text-2xl font-bold text-gray-900">
+                    Messages
+                  </div>
                   <p className="text-gray-600">Customer inquiries</p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 border-purple-200/20 card-shadow">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
@@ -103,7 +120,9 @@ export default function AdminPage() {
                   <BarChart3 className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-gray-900">Analytics</div>
+                  <div className="text-2xl font-bold text-gray-900">
+                    Analytics
+                  </div>
                   <p className="text-gray-600">System insights</p>
                 </div>
               </div>
@@ -112,9 +131,9 @@ export default function AdminPage() {
         </div>
 
         {/* Contact Messages */}
-        <div className="mb-8">
+        {/* <div className="mb-8">
           <ContactMessagesManager />
-        </div>
+        </div> */}
 
         {/* Events Management */}
         <div className="mb-8">
@@ -122,10 +141,10 @@ export default function AdminPage() {
         </div>
 
         {/* Portfolio Management */}
-        <div className="mb-8">
+        {/* <div className="mb-8">
           <PortfolioManager />
-        </div>
+        </div> */}
       </div>
     </div>
-  )
+  );
 }
