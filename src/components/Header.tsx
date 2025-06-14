@@ -39,7 +39,7 @@ export default function Header() {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-lg border-b border-blue-100' : 'bg-white/90 backdrop-blur-sm'
+      isScrolled ? 'glass border-b border-blue-400/20' : 'bg-slate-900/80 backdrop-blur-sm'
     }`}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
@@ -55,8 +55,8 @@ export default function Header() {
               />
             </div>
             <div className="flex flex-col">
-              <span className="text-xl font-bold text-gray-900">Trinity Sound</span>
-              <span className="text-xs text-blue-600">Professional Audio</span>
+              <span className="text-xl font-bold text-gradient-primary">Trinity Sound</span>
+              <span className="text-xs text-blue-400">Professional Audio</span>
             </div>
           </Link>
 
@@ -66,10 +66,10 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`transition-colors duration-200 font-medium ${
+                className={`transition-all duration-200 font-medium px-3 py-2 rounded-lg ${
                   isActivePage(item.href)
-                    ? 'text-blue-600 border-b-2 border-blue-600 pb-1'
-                    : 'text-gray-700 hover:text-blue-600'
+                    ? 'text-blue-400 bg-blue-500/10 border border-blue-400/20'
+                    : 'text-blue-100 hover:text-blue-300 hover:bg-blue-500/5'
                 }`}
               >
                 {item.name}
@@ -82,7 +82,7 @@ export default function Header() {
 
           {/* Mobile menu button */}
           <button
-            className="md:hidden text-gray-900"
+            className="md:hidden text-blue-100 hover:text-blue-300 transition-colors"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
