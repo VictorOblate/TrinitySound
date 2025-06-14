@@ -30,14 +30,14 @@ export default function AdminLoginPage() {
 
       if (result?.error) {
         toast({
-          id: "login-error",
+          // id: "login-error",
           title: "Login Failed",
           description: "Invalid credentials",
           variant: "destructive",
         });
       } else {
         toast({
-          id: "Login success",
+          // id: "Login success",
           title: "Success",
           description: "Welcome back, admin!",
         });
@@ -45,7 +45,7 @@ export default function AdminLoginPage() {
       }
     } catch (error) {
       toast({
-        id: "login-error",
+        // id: "login-error",
         title: "Error",
         description: "An unexpected error occurred",
         variant: "destructive",
