@@ -37,104 +37,35 @@ export default function EventsPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "upcoming" | "completed">("all");
 
-  // Mock data with Trinity-specific events
+  // Load events from the server (only admin-posted events are returned)
   useEffect(() => {
-    const mockEvents: Event[] = [
-      {
-        id: "1",
-        title: "National University Graduation",
-        description:
-          "Professional sound system setup for the university's annual graduation ceremony with over 500 graduates and families.",
-        date: "2025-07-15",
-        time: "09:00",
-        location: "National University of Lesotho, Roma",
-        image:
-          "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&h=600&fit=crop",
-        category: "Graduations",
-        attendees: 1200,
-        featured: true,
-        status: "upcoming",
-      },
-      {
-        id: "2",
-        title: "Corporate Annual Conference",
-        description:
-          "Multi-day conference setup with presentation audio, wireless microphones, and live streaming support for Lesotho Chamber of Commerce.",
-        date: "2025-06-20",
-        time: "08:30",
-        location: "Maseru Convention Centre",
-        image:
-          "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop",
-        category: "Corporate Events",
-        attendees: 300,
-        featured: false,
-        status: "upcoming",
-      },
-      {
-        id: "3",
-        title: "Royal Wedding Celebration",
-        description:
-          "Elegant wedding ceremony and reception with premium sound system, wireless microphones, and DJ services for the entire celebration.",
-        date: "2025-06-25",
-        time: "14:00",
-        location: "Maseru Sun Hotel Gardens",
-        image:
-          "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=600&fit=crop",
-        category: "Wedding Functions",
-        attendees: 250,
-        featured: true,
-        status: "upcoming",
-      },
-      {
-        id: "4",
-        title: "Golden Anniversary Celebration",
-        description:
-          "50th wedding anniversary celebration with elegant sound setup and special lighting for intimate family gathering.",
-        date: "2025-05-10",
-        time: "18:00",
-        location: "Private Residence, Maseru",
-        image:
-          "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800&h=600&fit=crop",
-        category: "Birthday Functions",
-        attendees: 80,
-        featured: false,
-        status: "completed",
-      },
-      {
-        id: "5",
-        title: "Baby Shower Celebration",
-        description:
-          "Intimate baby shower with background music system and microphone setup for games and speeches.",
-        date: "2025-04-15",
-        time: "15:00",
-        location: "Ha Abia Community Center",
-        image:
-          "https://images.unsplash.com/photo-1524824267900-2fa9cbf7a506?w=800&h=600&fit=crop",
-        category: "Baby Showers",
-        attendees: 40,
-        featured: false,
-        status: "completed",
-      },
-      {
-        id: "6",
-        title: "House Warming Party",
-        description:
-          "New home celebration with outdoor sound system and party music setup for neighborhood celebration.",
-        date: "2025-07-05",
-        time: "16:30",
-        location: "Teyateyaneng Residential Area",
-        image:
-          "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&h=600&fit=crop",
-        category: "House Warming",
-        attendees: 60,
-        featured: false,
-        status: "upcoming",
-      },
-    ];
+    async function load() {
+      try {
+        const res = await fetch('/api/events')
+        const json = await res.json()
+        const rows = (json.data || []).map((e: any) => ({
+          id: e.id,
+          title: e.name,
+          description: e.description,
+          date: e.date,
+          time: '',
+          location: e.location,
+          image: e.image_url || '',
+          category: e.category || '',
+          attendees: e.attendees || 0,
+          featured: !!e.featured,
+          status: new Date(e.date) >= new Date() ? 'upcoming' : 'completed',
+        }))
+        setEvents(rows)
+      } catch (err) {
+        console.error('Failed to load events', err)
+      } finally {
+        setLoading(false)
+      }
+    }
 
-    setEvents(mockEvents);
-    setLoading(false);
-  }, []);
+    load()
+  }, [])
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);

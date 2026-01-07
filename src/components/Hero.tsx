@@ -4,7 +4,22 @@ import { Volume2, Play, Users, Star, Award, Zap, Triangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
+import { useEffect, useState } from 'react'
+
 export default function Hero() {
+  const [upcoming, setUpcoming] = useState<any | null>(null)
+
+  useEffect(() => {
+    fetch('/api/events')
+      .then((r) => r.json())
+      .then((json) => {
+        if (json?.data?.length) {
+          setUpcoming(json.data[0])
+        }
+      })
+      .catch((err) => console.error(err))
+  }, [])
+
   return (
     <section className="pt-40 relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
       {/* Geometric Background Pattern */}
@@ -133,6 +148,26 @@ export default function Hero() {
             </Link>
           </Button>
         </div>
+
+        {/* Upcoming Event Banner */}
+        {upcoming && (
+          <div className="absolute bottom-8 left-8 bg-white/95 text-black rounded-lg shadow-lg w-full max-w-md p-4 flex items-center gap-4">
+            <div className="w-20 h-20 relative rounded overflow-hidden">
+              <img src={upcoming.image_url} alt={upcoming.name} className="object-cover w-full h-full" />
+            </div>
+            <div className="flex-1">
+              <div className="font-bold">{upcoming.name}</div>
+              <div className="text-sm text-gray-600">{new Date(upcoming.date).toLocaleDateString()}</div>
+            </div>
+            {upcoming.cta && (
+              <div>
+                <a href={upcoming.cta} target="_blank" rel="noreferrer">
+                  <Button className="bg-cyan-400 text-black">View</Button>
+                </a>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );

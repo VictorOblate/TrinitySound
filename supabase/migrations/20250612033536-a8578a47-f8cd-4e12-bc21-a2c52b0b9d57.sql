@@ -50,7 +50,7 @@ INSERT INTO public.portfolio_items (title, description, category, image_url, loc
 
 -- Insert a default admin user (password: admin123)
 INSERT INTO public.admin_users (email, password_hash, name) VALUES
-('admin@trinitysound.com', '$2b$10$rBaR3lUlOeHy.DqZ6ZYaNeJ3y7j1qF4qQ5Y5Q7Y5Q7Y5Q7Y5Q7Y5Q', 'Trinity Admin');
+('admin@trinitysound.com', '$2b$10$49twS2uqkCErbquMqNpehu122TR/sgJVB07Pm6V8jr0zU7tuFJmV2', 'Trinity Admin');
 
 -- Enable Row Level Security (RLS) for all tables
 ALTER TABLE public.admin_users ENABLE ROW LEVEL SECURITY;

@@ -4,8 +4,8 @@ import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-// import PortfolioManager from '@/components/admin/PortfolioManager'
-// import ContactMessagesManager from '@/components/admin/ContactMessagesManager'
+import PortfolioManager from '@/components/admin/PortfolioManager'
+import ContactMessagesManager from '@/components/admin/ContactMessagesManager'
 import EventsManager from "@/components/admin/EventsManager";
 import { signOut } from "next-auth/react";
 import {
@@ -131,9 +131,9 @@ export default function AdminPage() {
         </div>
 
         {/* Contact Messages */}
-        {/* <div className="mb-8">
+        <div className="mb-8">
           <ContactMessagesManager />
-        </div> */}
+        </div>
 
         {/* Events Management */}
         <div className="mb-8">
@@ -141,9 +141,9 @@ export default function AdminPage() {
         </div>
 
         {/* Portfolio Management */}
-        {/* <div className="mb-8">
+        <div className="mb-8">
           <PortfolioManager />
-        </div> */}
+        </div>
       </div>
     </div>
   );

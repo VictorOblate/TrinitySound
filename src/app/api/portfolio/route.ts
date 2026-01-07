@@ -28,8 +28,31 @@ let portfolioItems = [
   }
 ]
 
+import { getSupabaseAdmin } from "@/lib/supabase-server"
+
 export async function GET() {
-  return NextResponse.json(portfolioItems)
+  try {
+    const supabaseAdmin = getSupabaseAdmin()
+    // Only return portfolio items posted by admins
+    const { data: admins, error: adminErr } = await supabaseAdmin.from('admin_users').select('id')
+    if (adminErr) throw adminErr
+
+    const adminIds = (admins || []).map((a: any) => a.id).filter(Boolean)
+    if (!adminIds.length) return NextResponse.json([])
+
+    const { data, error } = await supabaseAdmin
+      .from('portfolio_items')
+      .select('*')
+      .in('created_by', adminIds)
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+    return NextResponse.json(data)
+  } catch (err) {
+    // fallback to mock data if Supabase not available or table missing
+    console.error("portfolio GET error, returning mock:", err)
+    return NextResponse.json(portfolioItems)
+  }
 }
 
 export async function POST(request: NextRequest) {

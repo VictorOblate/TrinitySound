@@ -20,6 +20,7 @@ interface Event {
   category: string
   attendees?: number
   featured: boolean
+  cta?: string
 }
 
 export default function EventsManager() {
@@ -28,50 +29,170 @@ export default function EventsManager() {
   const [isAddingEvent, setIsAddingEvent] = useState(false)
   const [editingEvent, setEditingEvent] = useState<Event | null>(null)
 
+  const [newEvent, setNewEvent] = useState<Partial<Event>>({
+    title: "",
+    description: "",
+    date: "",
+    time: "",
+    location: "",
+    image: "",
+    category: "",
+    featured: false,
+  })
+
   useEffect(() => {
-    // Mock data - replace with Supabase queries
-    const mockEvents: Event[] = [
-      {
-        id: '1',
-        title: 'Summer Music Festival 2024',
-        description: 'Join us for an incredible summer music festival featuring local and international artists.',
-        date: '2024-07-15',
-        time: '18:00',
-        location: 'Central Park Amphitheater',
-        image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800&h=600&fit=crop',
-        category: 'Music Festival',
-        attendees: 5000,
-        featured: true
-      },
-      {
-        id: '2',
-        title: 'Corporate Annual Gala',
-        description: 'Annual corporate gala event with professional audio and lighting setup.',
-        date: '2024-06-20',
-        time: '19:30',
-        location: 'Grand Ballroom Hotel',
-        image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&h=600&fit=crop',
-        category: 'Corporate',
-        attendees: 300,
-        featured: false
-      }
-    ]
-    
-    setEvents(mockEvents)
-    setLoading(false)
+    fetchEvents()
   }, [])
 
-  const handleDeleteEvent = (eventId: string) => {
-    setEvents(events.filter(event => event.id !== eventId))
+  const fetchEvents = async () => {
+    setLoading(true)
+    const res = await fetch('/api/admin/events')
+    const json = await res.json()
+    if (!res.ok) {
+      console.error('Failed to load events', json)
+      setLoading(false)
+      return
+    }
+    // supabase `events` table uses `name` instead of `title` — map accordingly
+    const mapped = (json.data || []).map((e: any) => ({
+      id: e.id,
+      title: e.name,
+      description: e.description,
+      date: e.date,
+      time: '',
+      location: e.location,
+      image: e.image_url,
+      category: e.category || '',
+      attendees: e.attendees,
+      featured: e.featured,
+    }))
+    setEvents(mapped)
+    setLoading(false)
   }
 
-  const toggleFeatured = (eventId: string) => {
-    setEvents(events.map(event => 
-      event.id === eventId 
-        ? { ...event, featured: !event.featured }
-        : event
-    ))
+  const handleDeleteEvent = async (eventId: string) => {
+    const res = await fetch(`/api/admin/events?id=${eventId}`, { method: 'DELETE' })
+    if (!res.ok) {
+      console.error('Failed to delete')
+      return
+    }
+    await fetchEvents()
   }
+
+  const toggleFeatured = async (eventId: string) => {
+    const event = events.find((ev) => ev.id === eventId)
+    if (!event) return
+    const res = await fetch('/api/admin/events', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: eventId, featured: !event.featured }),
+    })
+    if (!res.ok) {
+      console.error('Failed to toggle featured')
+      return
+    }
+    await fetchEvents()
+  }
+
+  const saveNewEvent = async () => {
+    const tempId = 'temp-' + Date.now()
+    const optimistic: Event = {
+      id: tempId,
+      title: newEvent.title || 'Untitled',
+      description: newEvent.description || '',
+      date: newEvent.date || '',
+      time: newEvent.time || '',
+      location: newEvent.location || '',
+      image: newEvent.image || '',
+      category: newEvent.category || '',
+      attendees: newEvent.attendees || 0,
+      featured: !!newEvent.featured,
+    }
+
+    setEvents((s) => [optimistic, ...s])
+
+    try {
+      const payload = {
+        name: newEvent.title,
+        description: newEvent.description,
+        date: newEvent.date,
+        cta: (newEvent as any).cta || undefined,
+        image_url: newEvent.image || undefined,
+        location: newEvent.location || undefined,
+        featured: !!newEvent.featured,
+      };
+
+      const res = await fetch('/api/admin/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json?.error || 'Failed to create event')
+
+      // replace optimistic with real
+      setEvents((s) => s.map((ev) => (ev.id === tempId ? {
+        id: json.data.id,
+        title: json.data.name,
+        description: json.data.description,
+        date: json.data.date,
+        time: '',
+        location: json.data.location,
+        image: json.data.image_url,
+        category: json.data.category || '',
+        attendees: json.data.attendees,
+        featured: json.data.featured,
+      } : ev)))
+
+      import('@/hooks/use-toast').then(({ toast }) => toast({ title: 'Event added', description: 'New event created' }))
+    } catch (err: any) {
+      console.error(err)
+      // revert optimistic
+      setEvents((s) => s.filter((ev) => ev.id !== tempId))
+      import('@/hooks/use-toast').then(({ toast }) => toast({ title: 'Error', description: err.message || 'Could not add event', variant: 'destructive' }))
+    } finally {
+      setIsAddingEvent(false)
+      setNewEvent({ title: '', description: '', date: '', time: '', location: '', image: '', category: '', featured: false })
+    }
+  }
+
+  const saveEditedEvent = async () => {
+    if (!editingEvent) return
+
+    // optimistic update
+    setEvents((s) => s.map((ev) => (ev.id === editingEvent.id ? editingEvent : ev)))
+
+    try {
+      const payload: any = {
+        id: editingEvent.id,
+        name: editingEvent.title,
+        description: editingEvent.description,
+        date: editingEvent.date,
+        image_url: editingEvent.image,
+        location: editingEvent.location,
+        featured: editingEvent.featured,
+      }
+
+      const res = await fetch('/api/admin/events', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json?.error || 'Failed to update event')
+
+      import('@/hooks/use-toast').then(({ toast }) => toast({ title: 'Updated', description: 'Event updated' }))
+      setEditingEvent(null)
+      await fetchEvents()
+    } catch (err: any) {
+      console.error(err)
+      import('@/hooks/use-toast').then(({ toast }) => toast({ title: 'Error', description: err.message || 'Could not update event', variant: 'destructive' }))
+      setEditingEvent(null)
+      await fetchEvents()
+    }
+  }
+
+
 
   if (loading) {
     return (
@@ -91,7 +212,23 @@ export default function EventsManager() {
       <CardHeader className="border-b border-gray-200">
         <div className="flex items-center justify-between">
           <CardTitle className="text-xl text-gray-900">Events Management</CardTitle>
-          <Dialog open={isAddingEvent} onOpenChange={setIsAddingEvent}>
+          <div className="flex items-center gap-3">
+            <Button variant="destructive" onClick={async () => {
+              if (!confirm('Remove all events not posted by admins? This cannot be undone.')) return
+              import('@/hooks/use-toast').then(({ toast }) => toast({ title: 'Cleaning', description: 'Removing non-admin events and portfolio items...' }))
+              try {
+                const res = await fetch('/api/admin/cleanup', { method: 'POST' })
+                const json = await res.json()
+                if (!res.ok) throw new Error(json?.error || 'Cleanup failed')
+                import('@/hooks/use-toast').then(({ toast }) => toast({ title: 'Cleanup done', description: `Removed ${json.deletedEvents || 0} events and ${json.deletedPortfolio || 0} portfolio items` }))
+                await fetchEvents()
+              } catch (err: any) {
+                console.error(err)
+                import('@/hooks/use-toast').then(({ toast }) => toast({ title: 'Error', description: err.message || 'Cleanup failed', variant: 'destructive' }))
+              }
+            }}>Remove non-admin items</Button>
+
+            <Dialog open={isAddingEvent} onOpenChange={setIsAddingEvent}>
             <DialogTrigger asChild>
               <Button className="bg-blue-600 hover:bg-blue-700">
                 <Plus className="h-4 w-4 mr-2" />
@@ -109,6 +246,8 @@ export default function EventsManager() {
                   </label>
                   <input
                     type="text"
+                    value={newEvent.title || ""}
+                    onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Enter event title"
                   />
@@ -119,6 +258,8 @@ export default function EventsManager() {
                   </label>
                   <textarea
                     rows={3}
+                    value={newEvent.description || ""}
+                    onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Enter event description"
                   />
@@ -130,6 +271,8 @@ export default function EventsManager() {
                     </label>
                     <input
                       type="date"
+                      value={newEvent.date || ""}
+                      onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -139,6 +282,8 @@ export default function EventsManager() {
                     </label>
                     <input
                       type="time"
+                      value={newEvent.time || ""}
+                      onChange={(e) => setNewEvent({ ...newEvent, time: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -149,35 +294,115 @@ export default function EventsManager() {
                   </label>
                   <input
                     type="text"
+                    value={newEvent.location || ""}
+                    onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Enter event location"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Event Poster
+                    Poster URL
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                    <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-sm text-gray-600 mb-2">
-                      Drag and drop your poster here, or click to browse
-                    </p>
-                    <Button variant="outline" size="sm">
-                      Choose File
-                    </Button>
-                  </div>
+                  <input
+                    type="url"
+                    value={newEvent.image || ""}
+                    onChange={(e) => setNewEvent({ ...newEvent, image: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="https://..."
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Poster URL</label>
+                  <input
+                    type="url"
+                    value={newEvent.image || ""}
+                    onChange={(e) => setNewEvent({ ...newEvent, image: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="https://..."
+                  />
+                  <input type="file" accept="image/*" className="mt-2" onChange={async (e) => {
+                    const f = e.target.files?.[0];
+                    if (!f) return;
+                    try {
+                      const fd = new FormData();
+                      fd.append('file', f);
+                      const res = await fetch('/api/admin/upload', { method: 'POST', body: fd });
+                      const json = await res.json();
+                      if (!res.ok) throw new Error(json?.error || 'Upload failed');
+                      setNewEvent({ ...newEvent, image: json.url });
+                      import('@/hooks/use-toast').then(({ toast }) => toast({ title: 'Uploaded', description: 'Poster uploaded' }));
+                    } catch (err: any) {
+                      console.error(err);
+                      import('@/hooks/use-toast').then(({ toast }) => toast({ title: 'Upload failed', description: err.message || 'Could not upload', variant: 'destructive' }));
+                    }
+                  }} />
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  <input
+                    id="featured"
+                    type="checkbox"
+                    checked={!!newEvent.featured}
+                    onChange={(e) => setNewEvent({ ...newEvent, featured: e.target.checked })}
+                  />
+                  <label htmlFor="featured" className="text-sm">Feature this event</label>
                 </div>
                 <div className="flex justify-end space-x-2">
                   <Button variant="outline" onClick={() => setIsAddingEvent(false)}>
                     Cancel
                   </Button>
-                  <Button className="bg-blue-600 hover:bg-blue-700">
+                  <Button className="bg-blue-600 hover:bg-blue-700" onClick={saveNewEvent}>
                     Save Event
                   </Button>
                 </div>
               </div>
             </DialogContent>
           </Dialog>
+
+          {/* Edit Event Dialog */}
+          <Dialog open={!!editingEvent} onOpenChange={(open) => { if (!open) setEditingEvent(null) }}>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>Edit Event</DialogTitle>
+              </DialogHeader>
+              {editingEvent && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Event Title</label>
+                    <input type="text" value={editingEvent.title} onChange={(e) => setEditingEvent({ ...editingEvent, title: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <textarea rows={3} value={editingEvent.description} onChange={(e) => setEditingEvent({ ...editingEvent, description: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                      <input type="date" value={editingEvent.date} onChange={(e) => setEditingEvent({ ...editingEvent, date: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                      <input type="text" value={editingEvent.location} onChange={(e) => setEditingEvent({ ...editingEvent, location: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Poster URL</label>
+                    <input type="url" value={editingEvent.image} onChange={(e) => setEditingEvent({ ...editingEvent, image: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <input id="edit-featured" type="checkbox" checked={!!editingEvent.featured} onChange={(e) => setEditingEvent({ ...editingEvent, featured: e.target.checked })} />
+                    <label htmlFor="edit-featured" className="text-sm">Feature this event</label>
+                  </div>
+                  <div className="flex justify-end space-x-2">
+                    <Button variant="outline" onClick={() => setEditingEvent(null)}>Cancel</Button>
+                    <Button className="bg-blue-600 hover:bg-blue-700" onClick={saveEditedEvent}>Save Changes</Button>
+                  </div>
+                </div>
+              )}
+            </DialogContent>
+          </Dialog>
+        </div>
         </div>
       </CardHeader>
       <CardContent className="p-6">

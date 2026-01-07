@@ -36,10 +36,47 @@ export default function Contact() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log("Form submitted:", formData);
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const json = await res.json();
+
+      if (!res.ok) {
+        throw new Error(json?.error || "Failed to submit message");
+      }
+
+      // show success toast
+      import("@/hooks/use-toast").then(({ toast }) => {
+        toast({ title: "Message sent", description: "We'll get back to you soon" });
+      });
+
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        eventType: "",
+        eventDate: "",
+        guestCount: "",
+        message: "",
+      });
+    } catch (error: any) {
+      import("@/hooks/use-toast").then(({ toast }) => {
+        toast({ title: "Error", description: error.message || "Could not send message", variant: "destructive" });
+      });
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const contactInfo = [
@@ -324,11 +361,12 @@ export default function Contact() {
                   <Button
                     type="submit"
                     size="lg"
+                    disabled={loading}
                     className="w-full bg-black hover:bg-cyan-400 text-white hover:text-black 
                                font-black tracking-tight py-4 text-lg transform hover:scale-105 
                                transition-all duration-300"
                   >
-                    SEND REQUEST
+                    {loading ? 'Sending...' : 'SEND REQUEST'}
                     <Send className="w-5 h-5 ml-2" />
                   </Button>
 

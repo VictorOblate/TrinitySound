@@ -103,11 +103,33 @@ export default function Portfolio() {
   ];
 
   useEffect(() => {
-    // Simulate API fetch
-    setTimeout(() => {
-      setPortfolioItems(mockPortfolioItems);
-      setLoading(false);
-    }, 1000);
+    async function load() {
+      try {
+        setLoading(true)
+        const res = await fetch('/api/portfolio')
+        const json = await res.json()
+        // Ensure mapping from DB fields to UI model
+        const items = (json || []).map((it: any) => ({
+          id: it.id,
+          title: it.title,
+          description: it.description || '',
+          category: it.category || '',
+          imageUrl: it.image_url || it.imageUrl || '',
+          location: it.location || '',
+          guests: it.guests || '',
+          date: it.date || '',
+          featured: !!it.featured,
+        }))
+        setPortfolioItems(items)
+      } catch (err) {
+        console.error('Failed to load portfolio, using demo data', err)
+        setPortfolioItems(mockPortfolioItems)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    load()
   }, []);
 
   const filteredItems =
