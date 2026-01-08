@@ -48,8 +48,8 @@ export default function Header() {
                 <Image
                   src="/logo-trinity.png"
                   alt="Trinity Events & Entertainment Logo"
-                  width={40}
-                  height={40}
+                  width={60}
+                  height={60}
                   className="object-contain"
                 />
               </div>
