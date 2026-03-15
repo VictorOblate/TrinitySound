@@ -159,6 +159,7 @@ export default function Hero() {
               <div className="font-bold">{upcoming.name}</div>
               <div className="text-sm text-gray-600">{new Date(upcoming.date).toLocaleDateString()}</div>
             </div>
+            
             {upcoming.cta && (
               <div>
                 {/* <a href={upcoming.cta} target="_blank" rel="noreferrer"> */}
