@@ -144,7 +144,7 @@ export default function Contact() {
               </div>
             </div>
 
-            <h2 className="text-4xl md:text-5xl font-black text-black mb-6 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-black mb-6 tracking-tight">
               GET IN TOUCH
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-cyan-400 to-black mx-auto mb-6"></div>
@@ -155,9 +155,9 @@ export default function Contact() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {/* Contact Info */}
-            <div className="lg:col-span-1 space-y-6">
+            <div className="lg:col-span-1 space-y-4 sm:space-y-6">
               {contactInfo.map((info, index) => {
                 const IconComponent = info.icon;
                 return (
@@ -230,7 +230,7 @@ export default function Contact() {
             </div>
 
             {/* Contact Form */}
-            <div className="lg:col-span-2">
+            <div className="sm:col-span-2 lg:col-span-2">
               <div className="bg-white border-2 border-black p-8 shadow-lg">
                 <div className="flex items-center space-x-3 mb-6">
                   <div className="w-8 h-8 bg-black transform rotate-45 flex items-center justify-center">
@@ -242,7 +242,7 @@ export default function Contact() {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                     <div>
                       <label className="block text-sm font-black text-black mb-2 tracking-tight">
                         FULL NAME *

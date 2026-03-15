@@ -134,7 +134,7 @@ export default function EventsPage() {
               </div>
             </div>
 
-            <h1 className="text-4xl md:text-5xl font-black text-black mb-6 tracking-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-black mb-6 tracking-tight">
               TRINITY EVENTS
             </h1>
             <div className="w-24 h-1 bg-gradient-to-r from-cyan-400 to-black mx-auto mb-6"></div>
@@ -166,10 +166,10 @@ export default function EventsPage() {
 
           {/* Featured Events */}
           <div className="mb-12">
-            <h2 className="text-2xl font-black text-black mb-8 tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-black text-black mb-6 sm:mb-8 tracking-tight">
               FEATURED EVENTS
             </h2>
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
               {filteredEvents
                 .filter((event) => event.featured)
                 .map((event) => (
@@ -264,12 +264,12 @@ export default function EventsPage() {
 
           {/* All Events */}
           <div>
-            <h2 className="text-2xl font-black text-black mb-8 tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-black text-black mb-6 sm:mb-8 tracking-tight">
               {filter === "all"
                 ? "ALL EVENTS"
                 : `${filter.toUpperCase()} EVENTS`}
             </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {filteredEvents.map((event) => (
                 <div
                   key={event.id}

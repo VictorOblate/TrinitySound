@@ -92,7 +92,7 @@ export default function Hero() {
 
         {/* Main Heading */}
         <div className="animate-fade-in-up">
-          <h1 className="text-6xl md:text-8xl font-black mb-6 leading-tight">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight">
             <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent block">
               TRINITY
             </span>
@@ -110,7 +110,7 @@ export default function Hero() {
 
         {/* Subtitle */}
         <div className="animate-slide-in-left">
-          <p className="text-xl md:text-2xl text-gray-300 mb-4 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-4 max-w-3xl mx-auto leading-relaxed">
             EVENTS & ENTERTAINMENT
           </p>
           <p className="text-lg text-gray-400 mb-12 max-w-2xl mx-auto">

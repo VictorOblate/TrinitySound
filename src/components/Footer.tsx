@@ -64,8 +64,8 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-16 relative z-10 border-t-2 border-gray-800">
-        <div className="grid md:grid-cols-4 gap-8">
+      <div className="container mx-auto px-4 py-12 sm:py-16 relative z-10 border-t-2 border-gray-800">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {/* Company Info */}
           <div className="space-y-6">
             <div className="flex items-center space-x-4">

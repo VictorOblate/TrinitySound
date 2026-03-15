@@ -105,7 +105,7 @@ export default function Services() {
               </div>
             </div>
 
-            <h2 className="text-4xl md:text-5xl font-black text-black mb-6 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-black mb-6 tracking-tight">
               OUR SERVICES
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-cyan-400 to-black mx-auto mb-6"></div>
@@ -117,7 +117,7 @@ export default function Services() {
           </div>
 
           {/* Services Grid */}
-          <div className="grid md:grid-cols-2 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-16">
             {services.map((service, index) => (
               <div
                 key={index}
@@ -162,7 +162,7 @@ export default function Services() {
               <h3 className="text-3xl font-black mb-6 tracking-tight">
                 PAYMENT OPTIONS
               </h3>
-              <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-center">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-4">
                     <div className="w-12 h-12 bg-cyan-400 flex items-center justify-center">

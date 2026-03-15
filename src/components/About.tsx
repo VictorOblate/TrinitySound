@@ -154,7 +154,7 @@ export default function About() {
               </div>
             </div>
 
-            <h2 className="text-4xl md:text-5xl font-black text-black mb-6 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-black mb-6 tracking-tight">
               ABOUT TRINITY
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-cyan-400 to-black mx-auto mb-6"></div>
@@ -167,7 +167,7 @@ export default function About() {
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 mb-16">
             {stats.map((stat, index) => (
               <div key={index} className="text-center group">
                 <div
@@ -188,7 +188,7 @@ export default function About() {
           </div>
 
           {/* Content Grid */}
-          <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-12 items-center mb-16">
             <div>
               <h3 className="text-3xl font-black text-black mb-6 tracking-tight">
                 OUR STORY
@@ -255,7 +255,7 @@ export default function About() {
             <h3 className="text-3xl font-black text-black mb-8 text-center tracking-tight">
               WE SPECIALIZE IN
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {specialties.map((specialty, index) => (
                 <div
                   key={index}
@@ -309,7 +309,7 @@ export default function About() {
           </div>
 
           {/* Payment & Special Offer */}
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             <div className="bg-black text-white p-8 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-24 h-24 bg-cyan-400/10 transform rotate-45 translate-x-12 -translate-y-12"></div>
               <div className="relative z-10">

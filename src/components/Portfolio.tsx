@@ -177,7 +177,7 @@ export default function Portfolio() {
               </div>
             </div>
 
-            <h2 className="text-4xl md:text-5xl font-black text-black mb-6 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-black mb-6 tracking-tight">
               OUR PORTFOLIO
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-cyan-400 to-black mx-auto mb-6"></div>
@@ -190,10 +190,10 @@ export default function Portfolio() {
           {/* Featured Projects */}
           {featuredItems.length > 0 && (
             <div className="mb-16">
-              <h3 className="text-2xl font-black text-black mb-8 text-center tracking-tight">
+              <h3 className="text-xl sm:text-2xl font-black text-black mb-8 text-center tracking-tight">
                 FEATURED PROJECTS
               </h3>
-              <div className="grid md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                 {featuredItems.map((item) => (
                   <Dialog key={item.id}>
                     <DialogTrigger asChild>
@@ -293,8 +293,8 @@ export default function Portfolio() {
           )}
 
           {/* Filter Controls */}
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
-            <div className="flex flex-wrap items-center space-x-2">
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-3 sm:gap-4">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-1 sm:gap-2 w-full sm:w-auto">
               <Filter className="h-5 w-5 text-black" />
               {categories.map((category) => (
                 <Button
@@ -345,9 +345,9 @@ export default function Portfolio() {
 
           {/* Portfolio Grid */}
           <div
-            className={`grid gap-6 ${
+            className={`grid gap-4 sm:gap-6 ${
               viewMode === "grid"
-                ? "md:grid-cols-2 lg:grid-cols-3"
+                ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
                 : "grid-cols-1"
             }`}
           >
