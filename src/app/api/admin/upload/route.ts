@@ -3,6 +3,9 @@ import { getServerSession } from "next-auth";
 import authOptions from "@/lib/authOptions";
 import sharp from "sharp";
 
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions as any);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

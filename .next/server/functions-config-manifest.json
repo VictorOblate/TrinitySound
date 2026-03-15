@@ -1,0 +1,1 @@
+{"version":1,"functions":{"/api/admin/cleanup":{},"/api/admin/contact-messages":{},"/api/admin/events":{},"/api/admin/portfolio":{},"/api/admin/upload":{},"/api/auth/[...nextauth]":{},"/api/contact":{},"/api/events":{},"/api/portfolio/[id]":{},"/api/portfolio":{}}}

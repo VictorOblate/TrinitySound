@@ -3,6 +3,10 @@ import { getServerSession } from 'next-auth'
 import authOptions from '@/lib/authOptions'
 import prisma from '@/lib/db'
 
+// Ensure this is treated as a dynamic route
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions as any)
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
