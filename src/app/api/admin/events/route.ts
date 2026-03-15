@@ -1,22 +1,22 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import authOptions from "@/lib/authOptions";
-import { getSupabaseAdmin } from "@/lib/supabase-server";
+import prisma from "@/lib/db";
 
 export async function GET() {
   const session = await getServerSession(authOptions as any);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const supabaseAdmin = getSupabaseAdmin();
+  try {
+    const data = await prisma.event.findMany({
+      orderBy: { date: "asc" },
+    });
 
-  const { data, error } = await supabaseAdmin
-    .from("events")
-    .select("*")
-    .order("date", { ascending: true });
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-
-  return NextResponse.json({ data });
+    return NextResponse.json({ data });
+  } catch (err: any) {
+    console.error(err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
 }
 
 export async function POST(req: Request) {
@@ -28,27 +28,27 @@ export async function POST(req: Request) {
 
   if (!name || !date) return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
 
-  let supabaseAdmin;
   try {
-    supabaseAdmin = getSupabaseAdmin();
+    const adminId = (session as any).user?.id;
+
+    const data = await prisma.event.create({
+      data: {
+        name,
+        description,
+        date: new Date(date),
+        cta,
+        image_url,
+        location,
+        featured: !!featured,
+        created_by: adminId,
+      },
+    });
+
+    return NextResponse.json({ data }, { status: 201 });
   } catch (err: any) {
     console.error(err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
-
-  const adminId = (session as any).user?.id
-
-  const { data, error } = await supabaseAdmin
-    .from("events")
-    .insert([
-      { name, description, date, cta, image_url, location, featured: !!featured, created_by: adminId },
-    ])
-    .select()
-    .single();
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-
-  return NextResponse.json({ data }, { status: 201 });
 }
 
 export async function DELETE(req: Request) {
@@ -59,18 +59,16 @@ export async function DELETE(req: Request) {
   const id = searchParams.get("id");
   if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
 
-  let supabaseAdmin;
   try {
-    supabaseAdmin = getSupabaseAdmin();
+    const data = await prisma.event.delete({
+      where: { id },
+    });
+
+    return NextResponse.json({ data });
   } catch (err: any) {
     console.error(err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
-
-  const { data, error } = await supabaseAdmin.from("events").delete().eq("id", id).select();
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-
-  return NextResponse.json({ data });
 }
 
 export async function PUT(req: Request) {
@@ -81,10 +79,20 @@ export async function PUT(req: Request) {
   const { id, ...updates } = body;
   if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
 
-  const supabaseAdmin = getSupabaseAdmin();
+  try {
+    // Convert date string to Date object if present
+    if (updates.date) {
+      updates.date = new Date(updates.date);
+    }
 
-  const { data, error } = await supabaseAdmin.from("events").update(updates).eq("id", id).select().single();
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    const data = await prisma.event.update({
+      where: { id },
+      data: updates,
+    });
 
-  return NextResponse.json({ data });
+    return NextResponse.json({ data });
+  } catch (err: any) {
+    console.error(err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
 }

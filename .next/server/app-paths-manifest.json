@@ -1,7 +1,22 @@
 {
-  "/page": "app/page.js",
+  "/_not-found": "app/_not-found.js",
+  "/about/page": "app/about/page.js",
   "/admin/login/page": "app/admin/login/page.js",
   "/admin/page": "app/admin/page.js",
+  "/admin/secret/page": "app/admin/secret/page.js",
+  "/api/admin/cleanup/route": "app/api/admin/cleanup/route.js",
+  "/api/admin/contact-messages/route": "app/api/admin/contact-messages/route.js",
+  "/api/admin/events/route": "app/api/admin/events/route.js",
+  "/api/admin/portfolio/route": "app/api/admin/portfolio/route.js",
+  "/api/admin/upload/route": "app/api/admin/upload/route.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/api/events/route": "app/api/events/route.js"
+  "/api/contact/route": "app/api/contact/route.js",
+  "/api/events/route": "app/api/events/route.js",
+  "/api/portfolio/[id]/route": "app/api/portfolio/[id]/route.js",
+  "/api/portfolio/route": "app/api/portfolio/route.js",
+  "/contact/page": "app/contact/page.js",
+  "/events/page": "app/events/page.js",
+  "/page": "app/page.js",
+  "/portfolio/page": "app/portfolio/page.js",
+  "/services/page": "app/services/page.js"
 }

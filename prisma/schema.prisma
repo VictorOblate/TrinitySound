@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Seed configuration
+// Run seed with: npm run seed
+// Configure: prisma/seed.ts
+
+model AdminUser {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  password_hash String
+  name          String
+  created_at    DateTime @default(now()) @db.Timestamp(6)
+  portfolio_items PortfolioItem[]
+  events        Event[]
+
+  @@map("admin_users")
+}
+
+model PortfolioItem {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  category    String
+  image_url   String
+  location    String?
+  guests      String?
+  date        String?
+  featured    Boolean  @default(false)
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+  updated_at  DateTime @default(now()) @updatedAt @db.Timestamp(6)
+  created_by  String?
+  admin_user  AdminUser? @relation(fields: [created_by], references: [id])
+
+  @@map("portfolio_items")
+}
+
+model ContactMessage {
+  id               String    @id @default(cuid())
+  name             String
+  email            String
+  phone            String?
+  event_type       String?
+  event_date       DateTime? @db.Date
+  expected_guests  String?
+  message          String
+  read             Boolean   @default(false)
+  created_at       DateTime  @default(now()) @db.Timestamp(6)
+
+  @@map("contact_messages")
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  date        DateTime @db.Date
+  cta         String?
+  image_url   String?
+  location    String?
+  featured    Boolean  @default(false)
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+  created_by  String?
+  admin_user  AdminUser? @relation(fields: [created_by], references: [id])
+
+  @@map("events")
+}

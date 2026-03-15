@@ -1,35 +1,23 @@
 import { NextResponse } from "next/server";
-import { getSupabaseAdmin } from "@/lib/supabase-server";
+import prisma from "@/lib/db";
 
 export async function GET(req: Request) {
-  const today = new Date().toISOString().split("T")[0];
-  let supabaseAdmin;
   try {
-    supabaseAdmin = getSupabaseAdmin();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const data = await prisma.event.findMany({
+      where: {
+        date: {
+          gte: today,
+        },
+      },
+      orderBy: { date: "asc" },
+    });
+
+    return NextResponse.json({ data });
   } catch (err: any) {
     console.error(err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
-
-  // Only return events posted by admins
-  const { data: admins, error: adminErr } = await supabaseAdmin.from('admin_users').select('id')
-  if (adminErr) {
-    console.error('Failed to load admins', adminErr)
-    return NextResponse.json({ error: adminErr.message }, { status: 500 })
-  }
-
-  const adminIds = (admins || []).map((a: any) => a.id).filter(Boolean)
-  if (!adminIds.length) {
-    return NextResponse.json({ data: [] })
-  }
-
-  const query = supabaseAdmin.from('events').select('*').gte('date', today).order('date', { ascending: true })
-  const { data, error } = await query.in('created_by', adminIds)
-
-  if (error) {
-    console.error(error)
-    return NextResponse.json({ error: error.message }, { status: 500 })
-  }
-
-  return NextResponse.json({ data })
 }

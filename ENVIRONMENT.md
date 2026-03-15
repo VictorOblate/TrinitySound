@@ -1,45 +1,125 @@
-# Environment variables
+# Environment Variables Guide
 
-Add these variables to your environment for full functionality:
+## Overview
+Trinity Sound uses MySQL with Prisma ORM for database management and NextAuth for authentication. All Supabase references have been removed.
 
-- SUPABASE_URL - your Supabase project URL
-- SUPABASE_SERVICE_ROLE_KEY - Supabase service role key (server-side only)
-- ADMIN_SECRET_LINK_TOKEN - secret token to access the hidden admin login link at `/admin/secret?t=<token>`
-- DATABASE_URL - Postgres connection string (used by drizzle migrations)
+## Required Environment Variables
 
-Notes:
-- Create a Supabase Storage bucket named `uploads` (or change the bucket name in `src/app/api/admin/upload/route.ts`) to host uploaded images.
+### Database Configuration
+- **DATABASE_URL** - MySQL connection string in format: `mysql://username:password@host:port/database_name`
+  - Example: `mysql://admin:password@localhost:3306/trinity_sound`
 
-Apply migrations (example):
+### NextAuth Configuration
+- **NEXTAUTH_SECRET** - Secret key for signing sessions and tokens
+  - Generate with: `openssl rand -base64 32`
+- **NEXTAUTH_URL** - Base URL for NextAuth callbacks
+  - Development: `http://localhost:3000`
+  - Production: `https://yourdomain.com`
+- **NEXTAUTH_PROVIDERS** - Authentication providers (default: "credentials")
 
-1. Add `DATABASE_URL` to your environment (Supabase provides the connection string on the Database -> Connection tab).
-2. Run migrations with Drizzle CLI (examples):
+### Admin Configuration
+- **ADMIN_SECRET_LINK_TOKEN** - Secret token to access hidden admin login at `/admin/secret?t=<token>`
 
-   - Check status: `npm run migrate:status`
-   - Generate a migration (if needed): `npm run migrate:generate`
-   - Push/apply migrations: `npm run migrate:push` or `npm run migrate:dev`
+## File Storage Configuration
 
-If you'd like, I can run migrations locally if you provide a `DATABASE_URL` (or you can run them from your CI / runner).
-Example:
+Trinity Sound uses **image compression with Sharp** and can store images in two ways:
 
+### For Development (Current Setup)
+- ✅ Images are automatically compressed to WebP format
+- ✅ Stored as base64 for immediate use in forms
+- ⚠️ Base64 storage works for portfolios but is not ideal for production
+- ✅ Max file size: 10MB, resizes to 1800px
+
+### For Production (Vercel Blob)
+
+When deployed to Vercel, you can enable persistent cloud storage:
+
+1. **Deploy to Vercel**:
+   ```bash
+   npm install -g vercel
+   vercel --prod
+   ```
+
+2. **Create Blob Store** in Vercel Dashboard:
+   - Project Settings → Storage → Blob → Create
+
+3. **Get your token**:
+   - In Blob settings, copy the **Read/Write Token** (starts with `vercel_blob_rw_`)
+
+4. **Add to `.env`**:
+   ```
+   BLOB_READ_WRITE_TOKEN="vercel_blob_rw_xxxxxxxxxxxxxx"
+   ```
+
+5. **Update the upload endpoint** (`src/app/api/admin/upload/route.ts`):
+   - Install: `npm install @vercel/blob`
+   - Uncomment the Vercel Blob code in the upload route
+   - Redeploy: `vercel --prod`
+
+### Image Compression Details
+
+Every uploaded image is:
+- ✅ Resized to max 1800px (maintains aspect ratio)
+- ✅ Converted to WebP format (80% quality)
+- ✅ Metadata removed
+- **Result**: Files typically 70-80% smaller than originals
+
+## Database Setup with Prisma
+
+### 1. Create MySQL Database
+```bash
+mysql -u root -p
+CREATE DATABASE trinity_sound CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+EXIT;
 ```
-SUPABASE_URL=https://xyz.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=service_role_...
-ADMIN_SECRET_LINK_TOKEN=super-secret-token-123
+
+### 2. Configure DATABASE_URL
+Add to your `.env` file:
+```
+DATABASE_URL="mysql://username:password@localhost:3306/trinity_sound"
 ```
 
-Note: keep `SUPABASE_SERVICE_ROLE_KEY` and `ADMIN_SECRET_LINK_TOKEN` secret and do not expose them to the browser.
+### 3. Run Prisma Migrations
+```bash
+# Generate/apply migrations to database
+npx prisma migrate dev
 
-Proxy configuration (Codespaces/IPv6-only Supabase):
-
-- To route Supabase calls through an IPv6-capable pooled connection, set `USE_SUPABASE_PROXY=true` in your environment and provide a `SUPABASE_PROXY_SECRET` to secure the HTTP proxy endpoint.
-- By default the proxy only allows requests to these Supabase paths: `/rest/v1`, `/storage/v1`, and `/auth/v1`. You can override with `SUPABASE_PROXY_ALLOWED_PREFIXES` (comma-separated).
-- Example:
-
-```
-USE_SUPABASE_PROXY=true
-SUPABASE_PROXY_SECRET=some-very-secret-token
-SUPABASE_PROXY_ALLOWED_PREFIXES=/rest/v1,/storage/v1,/auth/v1
+# View database in Prisma Studio
+npx prisma studio
 ```
 
-When `USE_SUPABASE_PROXY=true` the server Supabase client will use an undici-backed proxy fetch which is robust in Codespaces and other IPv6-limited environments.
+### 4. Seed Initial Admin (Optional)
+Replace `admin@trinitysound.com` and password hash with your values. Use bcryptjs to generate a hash:
+```bash
+node -e "const bcrypt = require('bcryptjs'); console.log(bcrypt.hashSync('your-password', 10))"
+```
+
+Then insert into database or use Prisma Studio.
+
+## Prisma Commands
+
+```bash
+# View database in GUI
+npx prisma studio
+
+# Create a new migration
+npx prisma migrate dev --name add_new_field
+
+# Deploy migrations in production
+npx prisma migrate deploy
+
+# Reset database (dev only)
+npx prisma migrate reset
+```
+
+## Important Notes
+
+- Keep `NEXTAUTH_SECRET` and `ADMIN_SECRET_LINK_TOKEN` secret and never commit to version control
+- The `DATABASE_URL` should not be committed to version control
+- Ensure your MySQL server is running and accessible before starting the app
+- File upload endpoint needs configuration (see File Storage section above)
+
+## Environment Variables Example
+
+See `.env.example` for a complete template with all configuration options.
+
