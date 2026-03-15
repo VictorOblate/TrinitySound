@@ -161,9 +161,9 @@ export default function Hero() {
             </div>
             {upcoming.cta && (
               <div>
-                <a href={upcoming.cta} target="_blank" rel="noreferrer">
-                  <Button className="bg-cyan-400 text-black">View</Button>
-                </a>
+                {/* <a href={upcoming.cta} target="_blank" rel="noreferrer"> */}
+                  {/* <Button className="bg-cyan-400 text-black">View</Button> */}
+                {/* </a> */}
               </div>
             )}
           </div>
